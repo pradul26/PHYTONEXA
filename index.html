@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhytoNexa – Kitchen MVP Experiment Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-deep: #1a4731;
+    --green-mid: #2d6a4f;
+    --green-bright: #52b788;
+    --green-light: #b7e4c7;
+    --green-pale: #d8f3dc;
+    --cream: #f9f5ef;
+    --amber: #e9a825;
+    --amber-light: #fef3c7;
+    --red-soft: #e05555;
+    --red-pale: #fde8e8;
+    --blue-cool: #3a7bd5;
+    --blue-pale: #e0eaff;
+    --text-dark: #1c2b22;
+    --text-mid: #3d5246;
+    --text-light: #6b8c7a;
+    --neg: #e05555;
+    --pos: #3a7bd5;
+    --mvp: #2d6a4f;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--cream);
+    font-family: 'Nunito', sans-serif;
+    color: var(--text-dark);
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--green-deep);
+    color: white;
+    padding: 48px 40px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 80% 50%, rgba(82,183,136,0.18) 0%, transparent 70%);
+  }
+  header .badge {
+    display: inline-block;
+    background: var(--green-bright);
+    color: var(--green-deep);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  header p {
+    font-size: 15px;
+    color: var(--green-light);
+    max-width: 620px;
+  }
+  header .meta-row {
+    display: flex; gap: 24px; flex-wrap: wrap;
+    margin-top: 24px;
+  }
+  header .meta-pill {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 13px;
+    color: var(--green-light);
+  }
+  header .meta-pill strong { color: white; display: block; font-size: 15px; }
+
+  /* ── NAV ── */
+  nav {
+    background: var(--green-mid);
+    display: flex; flex-wrap: wrap; gap: 4px;
+    padding: 10px 40px;
+    position: sticky; top: 0; z-index: 100;
+  }
+  nav a {
+    color: var(--green-light);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 5px 12px;
+    border-radius: 6px;
+    transition: background 0.2s, color 0.2s;
+  }
+  nav a:hover { background: rgba(255,255,255,0.15); color: white; }
+
+  /* ── MAIN WRAPPER ── */
+  main { max-width: 1100px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* ── SECTION ── */
+  section { margin-bottom: 64px; }
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--green-bright);
+    margin-bottom: 8px;
+  }
+  h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    color: var(--green-deep);
+    margin-bottom: 24px;
+    border-bottom: 3px solid var(--green-pale);
+    padding-bottom: 12px;
+  }
+  h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    color: var(--green-mid);
+    margin-bottom: 12px;
+  }
+  h4 {
+    font-size: 14px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-mid);
+    margin-bottom: 8px;
+  }
+
+  /* ── INFO CARDS ── */
+  .card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    border: 1.5px solid var(--green-pale);
+    box-shadow: 0 2px 12px rgba(26,71,49,0.06);
+  }
+  .card-grid { display: grid; gap: 16px; }
+  .card-grid-2 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .card-grid-3 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+  .card-grid-4 { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+
+  /* ── FRUIT CARDS ── */
+  .fruit-card {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    border: 2px solid var(--green-pale);
+    text-align: center;
+  }
+  .fruit-emoji { font-size: 3rem; margin-bottom: 8px; display: block; }
+  .fruit-name { font-weight: 800; font-size: 15px; color: var(--green-deep); }
+  .fruit-latin { font-style: italic; font-size: 11px; color: var(--text-light); margin-bottom: 10px; }
+  .fruit-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 12px;
+    margin: 2px;
+  }
+  .tag-climacteric { background: #fff3e0; color: #e65100; }
+  .tag-non { background: var(--blue-pale); color: var(--blue-cool); }
+  .tag-veg { background: var(--green-pale); color: var(--green-mid); }
+  .fruit-detail { font-size: 12px; color: var(--text-mid); margin-top: 10px; line-height: 1.5; }
+  .fail-threshold {
+    background: var(--red-pale);
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 11px;
+    color: var(--red-soft);
+    font-weight: 700;
+    margin-top: 8px;
+  }
+
+  /* ── FORMULATION STEPS ── */
+  .step-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .step-item {
+    display: flex; gap: 14px; align-items: flex-start;
+    background: white; border-radius: 12px; padding: 16px;
+    border: 1.5px solid var(--green-pale);
+  }
+  .step-num {
+    min-width: 32px; height: 32px;
+    background: var(--green-deep);
+    color: white;
+    border-radius: 50%;
+    font-weight: 800; font-size: 13px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .step-content h5 { font-weight: 800; font-size: 13px; color: var(--green-deep); margin-bottom: 4px; }
+  .step-content p { font-size: 13px; color: var(--text-mid); }
+  .step-content .cite {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--blue-cool);
+    margin-top: 4px;
+  }
+  .step-content .cite a { color: var(--blue-cool); }
+  .tip {
+    background: var(--amber-light);
+    border-left: 4px solid var(--amber);
+    border-radius: 0 8px 8px 0;
+    padding: 8px 12px;
+    font-size: 12px;
+    color: #7c5c00;
+    margin-top: 6px;
+  }
+  .warning {
+    background: var(--red-pale);
+    border-left: 4px solid var(--red-soft);
+    border-radius: 0 8px 8px 0;
+    padding: 8px 12px;
+    font-size: 12px;
+    color: #7c1a1a;
+    margin-top: 6px;
+  }
+
+  /* ── GROUP COMPARISON TABLE ── */
+  .group-table { width: 100%; border-collapse: separate; border-spacing: 0; border-radius: 12px; overflow: hidden; border: 1.5px solid var(--green-pale); }
+  .group-table th {
+    padding: 14px 16px;
+    font-size: 12px; font-weight: 800;
+    letter-spacing: 0.5px; text-transform: uppercase;
+  }
+  .group-table td {
+    padding: 12px 16px;
+    font-size: 13px;
+    border-top: 1px solid var(--green-pale);
+    vertical-align: top;
+  }
+  .group-table tr:nth-child(even) td { background: var(--green-pale); }
+  .th-neg { background: var(--neg); color: white; }
+  .th-pos { background: var(--pos); color: white; }
+  .th-mvp { background: var(--mvp); color: white; }
+  .group-badge {
+    display: inline-block;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    padding: 3px 9px; border-radius: 10px; margin-bottom: 4px;
+  }
+  .gb-neg { background: var(--red-pale); color: var(--neg); }
+  .gb-pos { background: var(--blue-pale); color: var(--blue-cool); }
+  .gb-mvp { background: var(--green-pale); color: var(--green-mid); }
+
+  /* ── TREE DIAGRAM ── */
+  .tree-wrap { overflow-x: auto; padding: 8px 0; }
+  .tree-root {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 0;
+  }
+  .tree-node-top {
+    background: var(--green-deep);
+    color: white;
+    padding: 10px 32px;
+    border-radius: 10px;
+    font-weight: 800; font-size: 14px;
+    text-align: center;
+  }
+  .tree-connector { width: 2px; height: 24px; background: var(--green-bright); margin: 0 auto; }
+  .tree-h-connector {
+    display: flex; align-items: flex-start;
+    position: relative;
+    gap: 0;
+  }
+  .tree-branch {
+    display: flex; flex-direction: column; align-items: center;
+    min-width: 340px;
+  }
+  .tree-branch-label {
+    padding: 8px 24px;
+    border-radius: 10px;
+    font-weight: 800; font-size: 13px;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .lbl-ambient { background: #fff3e0; color: #c45f00; border: 2px solid #ffb347; }
+  .lbl-fridge { background: var(--blue-pale); color: #1a4db3; border: 2px solid #7eb3f5; }
+  .horiz-line {
+    height: 2px; background: var(--green-bright);
+    align-self: flex-start; margin-top: 20px;
+    flex: 1;
+  }
+  .group-row {
+    display: flex; gap: 8px; margin-top: 0; flex-wrap: wrap; justify-content: center;
+  }
+  .group-col {
+    background: white;
+    border-radius: 10px;
+    padding: 12px 14px;
+    min-width: 120px;
+    border: 2px solid;
+    text-align: center;
+  }
+  .gc-neg { border-color: var(--neg); }
+  .gc-pos { border-color: var(--pos); }
+  .gc-mvp { border-color: var(--mvp); }
+  .gc-label { font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+  .gcl-neg { color: var(--neg); }
+  .gcl-pos { color: var(--pos); }
+  .gcl-mvp { color: var(--mvp); }
+  .fruit-mini { font-size: 11px; color: var(--text-mid); line-height: 1.8; }
+  .fruit-mini .fn { font-weight: 700; color: var(--text-dark); }
+  .fruit-mini .fc { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-light); }
+
+  /* ── TIMELINE TABLE ── */
+  .timeline-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .timeline-table th {
+    background: var(--green-deep);
+    color: white;
+    padding: 10px 12px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .timeline-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--green-pale);
+    vertical-align: top;
+  }
+  .timeline-table tr:nth-child(even) td { background: #f5fbf7; }
+  .day-pill {
+    display: inline-block;
+    background: var(--green-pale);
+    color: var(--green-deep);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin: 2px;
+  }
+  .day-pill.urgent { background: var(--red-pale); color: var(--neg); }
+  .assess-tag {
+    display: inline-block;
+    background: var(--amber-light);
+    color: #7c5c00;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 8px;
+    margin: 2px;
+  }
+
+  /* ── STORAGE BOX ── */
+  .storage-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media(max-width:600px){ .storage-grid { grid-template-columns: 1fr; } }
+  .storage-box {
+    border-radius: 16px;
+    padding: 24px;
+    border: 2px solid;
+  }
+  .storage-box.ambient { background: #fffbf0; border-color: #ffb347; }
+  .storage-box.fridge { background: #eff6ff; border-color: #7eb3f5; }
+  .storage-box h3 { margin-bottom: 14px; }
+  .storage-box .param { display: flex; gap: 10px; align-items: baseline; margin-bottom: 8px; }
+  .storage-box .param .pk { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; min-width: 90px; }
+  .storage-box .param .pv { font-family: 'DM Mono', monospace; font-size: 14px; font-weight: 600; }
+  .storage-box.ambient .param .pk { color: #c45f00; }
+  .storage-box.fridge .param .pk { color: #1a4db3; }
+
+  /* ── SPECIMEN COUNT ── */
+  .count-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+  .count-card {
+    background: white;
+    border-radius: 12px;
+    padding: 18px;
+    border: 1.5px solid var(--green-pale);
+    text-align: center;
+  }
+  .count-num { font-family: 'DM Serif Display', serif; font-size: 2.5rem; color: var(--green-deep); }
+  .count-label { font-size: 12px; color: var(--text-light); font-weight: 600; }
+  .count-breakdown { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-mid); margin-top: 8px; line-height: 1.8; }
+
+  /* ── ASSESSMENT METHODS ── */
+  .method-card {
+    background: white;
+    border-radius: 14px;
+    padding: 20px;
+    border: 1.5px solid var(--green-pale);
+    margin-bottom: 12px;
+  }
+  .method-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .method-icon {
+    width: 40px; height: 40px;
+    background: var(--green-pale);
+    border-radius: 10px;
+    font-size: 20px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .method-title { font-weight: 800; font-size: 15px; color: var(--green-deep); }
+  .method-type { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+  .mt-nd { color: var(--green-mid); }
+  .mt-d { color: var(--neg); }
+  .method-steps { list-style: none; }
+  .method-steps li {
+    padding: 6px 0 6px 20px;
+    position: relative;
+    font-size: 13px;
+    color: var(--text-mid);
+    border-bottom: 1px dashed var(--green-pale);
+  }
+  .method-steps li:last-child { border-bottom: none; }
+  .method-steps li::before {
+    content: '→';
+    position: absolute; left: 0;
+    color: var(--green-bright);
+    font-weight: 800;
+  }
+  .formula-box {
+    background: var(--green-pale);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--green-deep);
+    margin-top: 8px;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  /* ── ASSESSMENT ORDER ── */
+  .order-row {
+    display: flex; align-items: center; gap: 0;
+    flex-wrap: wrap;
+    margin: 16px 0;
+  }
+  .order-step {
+    background: white;
+    border: 2px solid var(--green-pale);
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--green-deep);
+    text-align: center;
+    min-width: 110px;
+  }
+  .order-arrow {
+    font-size: 20px;
+    color: var(--green-bright);
+    padding: 0 6px;
+    font-weight: 900;
+  }
+  .priority-nd { border-color: var(--green-bright) !important; background: var(--green-pale) !important; }
+  .priority-d { border-color: var(--neg) !important; background: var(--red-pale) !important; color: var(--neg) !important; }
+
+  /* ── CITATION BLOCK ── */
+  .cite-block {
+    background: var(--blue-pale);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 11px;
+    color: var(--text-mid);
+    margin-top: 6px;
+  }
+  .cite-block a { color: var(--blue-cool); font-family: 'DM Mono', monospace; font-size: 10px; word-break: break-all; }
+
+  /* ── PRINT CHECKLIST ── */
+  .checklist { list-style: none; }
+  .checklist li {
+    padding: 8px 0 8px 28px;
+    position: relative;
+    font-size: 13px;
+    border-bottom: 1px dashed var(--green-pale);
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist li::before {
+    content: '☐';
+    position: absolute; left: 0;
+    font-size: 16px; color: var(--green-bright);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--green-deep);
+    color: var(--green-light);
+    padding: 28px 40px;
+    font-size: 12px;
+    text-align: center;
+  }
+  footer strong { color: white; }
+
+  /* ── UTILITY ── */
+  .divider { height: 1px; background: var(--green-pale); margin: 32px 0; }
+  .tag { display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 3px 10px; border-radius: 12px; }
+  .highlight { background: var(--green-pale); border-radius: 4px; padding: 1px 6px; font-weight: 700; }
+  .ref-link { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--blue-cool); }
+  .ref-link a { color: var(--blue-cool); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="badge">Phase 1 · Experiment Briefing</div>
+  <h1>PhytoNexa Kitchen MVP<br>Experiment Guide</h1>
+  <p>Step-by-step visual protocol for testing the chitosan–polyphenol edible coating on 4 fresh produce candidates in ambient and refrigerated conditions.</p>
+  <div class="meta-row">
+    <div class="meta-pill"><strong>4 Fruits/Veg</strong>Strawberry · Banana · Cherry Tomato · Bell Pepper</div>
+    <div class="meta-pill"><strong>3 Groups</strong>Negative · Positive · Active MVP</div>
+    <div class="meta-pill"><strong>2 Conditions</strong>Ambient · Refrigerated</div>
+    <div class="meta-pill"><strong>Max Duration</strong>21 days (tomato/pepper)</div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav>
+  <a href="#fruits">Fruit Selection</a>
+  <a href="#formulation">Formulation</a>
+  <a href="#groups">Groups</a>
+  <a href="#application">Application</a>
+  <a href="#storage">Storage</a>
+  <a href="#tree">Experiment Tree</a>
+  <a href="#timeline">Timeline</a>
+  <a href="#methods">Assessment Methods</a>
+  <a href="#order">Assessment Order</a>
+  <a href="#checklist">Pre-Experiment Checklist</a>
+</nav>
+
+<main>
+
+<!-- ═══════════════════════════════════════════════
+  SECTION 1 – FRUIT SELECTION
+════════════════════════════════════════════════ -->
+<section id="fruits">
+  <div class="section-label">Section 01</div>
+  <h2>Fruit & Vegetable Selection</h2>
+  <p style="margin-bottom:20px; font-size:14px; color:var(--text-mid);">Four candidates were chosen to cover both <strong>climacteric</strong> and <strong>non-climacteric</strong> physiology, giving a full picture of the coating's mechanisms.</p>
+
+  <div class="card-grid card-grid-4">
+
+    <!-- Strawberry -->
+    <div class="fruit-card">
+      <span class="fruit-emoji">🍓</span>
+      <div class="fruit-name">Strawberry</div>
+      <div class="fruit-latin">Fragaria × ananassa</div>
+      <span class="fruit-tag tag-non">Non-Climacteric</span>
+      <div class="fruit-detail">Extremely perishable. Thin epidermis, no rind. Primary target for <em>Botrytis cinerea</em> (grey mould). Fastest water loss. Must be procured at full red maturity (≥75% red surface).</div>
+      <div class="fail-threshold">⚠ Fail threshold: 2.5–3.0% weight loss</div>
+      <div class="cite-block"><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5224550/" target="_blank">PMC5224550 – Chitosan on strawberry postharvest quality</a></div>
+    </div>
+
+    <!-- Banana -->
+    <div class="fruit-card">
+      <span class="fruit-emoji">🍌</span>
+      <div class="fruit-name">Banana</div>
+      <div class="fruit-latin">Musa acuminata</div>
+      <span class="fruit-tag tag-climacteric">Climacteric</span>
+      <div class="fruit-detail">Strong climacteric ethylene burst drives rapid peel browning and softening. Procure at <strong>Stage 2–3</strong> (green with yellow tips). Excellent visible ripening proxy — colour change is unmistakable without equipment.</div>
+      <div class="fail-threshold">⚠ Fail threshold: ~5% weight loss + stage 5 peel</div>
+      <div class="cite-block"><a href="https://www.mdpi.com/2624-7402/5/1/34" target="_blank">MDPI 2624-7402 – Edible coatings fruit shelf life</a></div>
+    </div>
+
+    <!-- Cherry Tomato -->
+    <div class="fruit-card">
+      <span class="fruit-emoji">🍅</span>
+      <div class="fruit-name">Cherry Tomato</div>
+      <div class="fruit-latin">Solanum lycopersicum var. cerasiforme</div>
+      <span class="fruit-tag tag-climacteric">Climacteric</span>
+      <div class="fruit-detail">Continuous visible ripening (green→red) via lycopene synthesis tied to ethylene & O₂. Procure at <strong>Breaker–Turning stage</strong> (10–30% colour change). High susceptibility to <em>Penicillium</em>.</div>
+      <div class="fail-threshold">⚠ Fail threshold: 5.0–6.0% weight loss</div>
+      <div class="cite-block"><a href="https://journals.ashs.org/downloadpdf/view/journals/hortsci/27/9/article-p1016.pdf" target="_blank">ASHS – Chitosan coating to extend tomato storage life</a></div>
+    </div>
+
+    <!-- Bell Pepper -->
+    <div class="fruit-card">
+      <span class="fruit-emoji">🫑</span>
+      <div class="fruit-name">Bell Pepper</div>
+      <div class="fruit-latin">Capsicum annuum</div>
+      <span class="fruit-tag tag-non">Non-Climacteric</span>
+      <div class="fruit-detail">Non-climacteric but sensitive to moisture loss and chilling. Procure firm, fully coloured (red or green). Similar failure mode to zucchini: surface shrivelling, pitting. Good chilling stress test at 4°C.</div>
+      <div class="fail-threshold">⚠ Fail threshold: ~4.0–5.0% weight loss</div>
+      <div class="cite-block"><a href="https://postharvest.ucdavis.edu/produce-facts-sheets/peppers-sweet/" target="_blank">UC Davis Postharvest – Bell Pepper facts</a></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+  SECTION 2 – FORMULATION
+════════════════════════════════════════════════ -->
+<section id="formulation">
+  <div class="section-label">Section 02</div>
+  <h2>How to Prepare the Coating Solutions</h2>
+  <p style="margin-bottom:24px; font-size:14px; color:var(--text-mid);">You will prepare <strong>three different solutions</strong> per the table below. All three share the same chitosan-glycerol base; only Group C adds polyphenols. Follow every step in order.</p>
+
+  <div class="card-grid card-grid-3" style="margin-bottom:28px;">
+    <div class="card" style="border-color:#ffcdd2;">
+      <div class="group-badge gb-neg">Group A</div>
+      <h3 style="color:var(--neg);">Negative Control</h3>
+      <p style="font-size:13px;">Distilled water only — no coating applied. Represents standard unprotected produce. Used as the baseline to measure all improvements.</p>
+    </div>
+    <div class="card" style="border-color:#bbdefb;">
+      <div class="group-badge gb-pos">Group B</div>
+      <h3 style="color:var(--pos);">Positive Control</h3>
+      <p style="font-size:13px;">1.5% Chitosan + Glycerol matrix only. No polyphenols. Isolates the physical barrier and elicitor effect of the biopolymer alone.</p>
+    </div>
+    <div class="card" style="border-color:var(--green-bright);">
+      <div class="group-badge gb-mvp">Group C</div>
+      <h3 style="color:var(--green-mid);">Active MVP</h3>
+      <p style="font-size:13px;">Full chitosan + glycerol + OMW polyphenol (hydroxytyrosol/tyrosol) nano-emulsion. This is the commercial product being validated.</p>
+    </div>
+  </div>
+
+  <h3>Step-by-Step: Preparing Group B (Chitosan Base) — also applies to Group C</h3>
+  <ul class="step-list">
+
+    <li class="step-item">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h5>Make the Acetic Acid Solvent (1% v/v)</h5>
+        <p>Mix <strong>1 part white culinary vinegar</strong> (≈5% acetic acid) with <strong>4 parts distilled water</strong>. Example: 200 mL vinegar + 800 mL water = 1 litre solvent. This creates the acidic medium needed to dissolve chitosan.</p>
+        <div class="tip">💡 Use a measuring cup with mL markings. Ratio is 1:4 (vinegar:water) by volume.</div>
+        <span class="cite"><a href="https://www.frontiersin.org/journals/sustainable-food-systems/articles/10.3389/fsufs.2023.1177010/full" target="_blank">Frontiers – Chitosan edible coating tuna filets (dissolution protocol)</a></span>
+      </div>
+    </li>
+
+    <li class="step-item">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h5>Dissolve the Chitosan Powder (1.5% w/v)</h5>
+        <p>Weigh <strong>1.5 g chitosan powder per 100 mL of solvent</strong>. Slowly add powder to the solvent while stirring. Set up a <strong>double boiler</strong> (bowl over pot of hot water) and heat to <strong>~45°C</strong>. Whisk vigorously for <strong>30–45 minutes</strong> until the solution becomes clear and honey-like.</p>
+        <div class="warning">⚠ Do NOT heat above 50°C — this degrades the polymer chains.</div>
+        <span class="cite"><a href="https://www.frontiersin.org/journals/sustainable-food-systems/articles/10.3389/fsufs.2023.1177010/full" target="_blank">Frontiers – Chitosan edible coating (preparation method)</a></span>
+      </div>
+    </li>
+
+    <li class="step-item">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h5>Add Glycerol (Plasticizer)</h5>
+        <p>Add <strong>0.25 mL food-grade glycerol per gram of chitosan</strong> used. Example: if you used 3 g chitosan → add 0.75 mL glycerol. Stir thoroughly. Glycerol prevents the dried coating from cracking or flaking.</p>
+        <div class="tip">💡 Food-grade glycerol is available at pharmacies.</div>
+        <span class="cite"><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12030211/" target="_blank">PMC12030211 – Preparation and Application of Edible Chitosan Coating</a></span>
+      </div>
+    </li>
+
+    <li class="step-item">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h5>Group C Only: Add OMW Polyphenol Concentrate</h5>
+        <p>Add your prepared OMW polyphenol extract (hydroxytyrosol/tyrosol fraction) to the chitosan-glycerol matrix. Blend immediately using a <strong>high-speed blender (Vitamix or equivalent)</strong> on maximum speed for exactly <strong>5 minutes</strong>. This mimics the Phase Inversion nano-emulsification step.</p>
+        <div class="tip">💡 The liquid should look uniformly greenish/amber with no oil separation.</div>
+        <span class="cite"><a href="https://www.mdpi.com/2304-8158/10/2/335" target="_blank">MDPI – Tyrosol-enriched tomatoes from chitosan coating</a></span>
+      </div>
+    </li>
+
+    <li class="step-item">
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <h5>Rest & Deaerate</h5>
+        <p>Let the prepared solution stand undisturbed for <strong>60 minutes</strong> to allow air bubbles to escape. Bubbles in the coating cause uneven coverage on the fruit surface.</p>
+        <span class="cite"><a href="https://digitalcommons.latech.edu/cgi/viewcontent.cgi?article=1099&context=theses" target="_blank">Louisiana Tech – Antimicrobial Edible Coating Chitosan (deaeration step)</a></span>
+      </div>
+    </li>
+
+  </ul>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+  SECTION 3 – APPLICATION PROTOCOL
+════════════════════════════════════════════════ -->
+<section id="application">
+  <div class="section-label">Section 03</div>
+  <h2>How to Apply the Coating</h2>
+
+  <ul class="step-list">
+
+    <li class="step-item">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h5>Randomize & Label Specimens</h5>
+        <p>Lay out all produce. Randomly assign each piece to Group A, B, or C and tag each with a number (e.g., "Strawberry-A-01"). This prevents bias from picking only "nice-looking" ones for the MVP group.</p>
+        <div class="tip">💡 Write tags on sticky labels or masking tape. Keep a log matching numbers to groups.</div>
+      </div>
+    </li>
+
+    <li class="step-item">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h5>Sanitize All Produce</h5>
+        <p>Wash all specimens in a <strong>dilute hypochlorite solution at 50 ppm</strong> for exactly <strong>2 minutes</strong>. To make 50 ppm: add ~2.5 mL household bleach (2% NaOCl) to 1 litre of water. This removes pre-existing field fungi.</p>
+        <p style="margin-top:6px;">Rinse thoroughly with distilled water afterwards to remove residual chlorine.</p>
+        <div class="warning">⚠ Group A (negative control): wash with distilled water ONLY, no coating steps below.</div>
+        <span class="cite"><a href="https://www.maxapress.com/article/id/66b2d6b1fa6c581f17c3ae4b" target="_blank">Maxapress – Edible coatings for fresh produce: chitosan, beeswax (sanitization protocol)</a></span>
+      </div>
+    </li>
+
+    <li class="step-item">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h5>Dry the Produce Completely Before Coating</h5>
+        <p>Place all specimens on sterilized wire cooling racks. Use a small fan for <strong>ambient air drying</strong> until surfaces are completely dry to the touch. Any water remaining will dilute the coating and prevent adhesion.</p>
+        <div class="warning">⚠ This step is critical — do not skip or rush it. Usually takes 15–20 min.</div>
+        <span class="cite"><a href="https://www.maxapress.com/article/id/66b2d6b1fa6c581f17c3ae4b" target="_blank">Maxapress – Edible coatings for fresh produce (pre-drying protocol)</a></span>
+      </div>
+    </li>
+
+    <li class="step-item">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h5>Immersion Coating (Groups B & C)</h5>
+        <p>Using sterilized stainless-steel tongs, submerge each specimen fully into its assigned coating solution. Hold submerged for exactly <strong>3 minutes</strong>. On withdrawal, hold the specimen over the bowl for <strong>15 seconds</strong> to allow excess to drip off, then place on the wire rack.</p>
+        <div class="tip">💡 Keep specimens from touching each other on the rack to prevent coating tearing.</div>
+        <span class="cite"><a href="https://www.maxapress.com/article/id/66b2d6b1fa6c581f17c3ae4b" target="_blank">Maxapress – Edible coatings for fresh produce (immersion technique)</a></span>
+      </div>
+    </li>
+
+    <li class="step-item">
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <h5>Cure the Coating</h5>
+        <p>Leave coated specimens on the rack under <strong>gentle fan-assisted airflow at room temperature</strong> for exactly <strong>60 minutes</strong>. The coating is fully cured when it transitions from a wet, shiny film to an <em>invisible, dry-to-touch, semi-permeable membrane</em>.</p>
+        <div class="tip">💡 If the coating looks white or cloudy when dry, it's still too thick — that batch may cause anaerobic fermentation. Dilute slightly.</div>
+        <span class="cite"><a href="https://www.maxapress.com/article/id/66b2d6b1fa6c581f17c3ae4b" target="_blank">Maxapress – Edible coatings for fresh produce (curing protocol)</a></span>
+      </div>
+    </li>
+
+    <li class="step-item">
+      <div class="step-num">6</div>
+      <div class="step-content">
+        <h5>Record Initial Weights (Day 0)</h5>
+        <p>Immediately after curing, weigh every individual specimen using a digital scale calibrated to <strong>0.01 g precision</strong>. Record in your data sheet as W₀ (initial weight). This is your Day 0 baseline for weight loss calculations.</p>
+        <span class="cite"><a href="https://journals.flvc.org/fshs/article/download/86230/83146/0" target="_blank">Florida Online Journals – Weight loss and visual quality of fruits and vegetables</a></span>
+      </div>
+    </li>
+
+    <li class="step-item">
+      <div class="step-num">7</div>
+      <div class="step-content">
+        <h5>Distribute to Storage Conditions</h5>
+        <p>Split each group (A, B, C) of each fruit in half — one half goes to <strong>ambient storage</strong>, the other to <strong>refrigerated storage</strong>. Place in identical open-air plastic or glass trays. Specimens must not be wrapped or sealed — open-air exposure is required.</p>
+      </div>
+    </li>
+
+  </ul>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+  SECTION 4 – STORAGE CONDITIONS
+════════════════════════════════════════════════ -->
+<section id="storage">
+  <div class="section-label">Section 04</div>
+  <h2>Storage Conditions</h2>
+
+  <div class="storage-grid">
+    <div class="storage-box ambient">
+      <h3>🌡 Ambient Storage (Cohort 1)</h3>
+      <div class="param"><span class="pk">Temperature</span><span class="pv">22°C ± 2°C</span></div>
+      <div class="param"><span class="pk">Humidity (RH)</span><span class="pv">65% ± 5%</span></div>
+      <div class="param"><span class="pk">Simulates</span><span class="pv">Kitchen countertop / uncontrolled retail</span></div>
+      <div class="param"><span class="pk">Container</span><span class="pv">Open-air plastic tray (no lid, no wrap)</span></div>
+      <div class="param"><span class="pk">Purpose</span><span class="pv">Tests coating under rapid degradation stress. Worst-case real-world condition.</span></div>
+      <div class="tip" style="margin-top:12px;">💡 Use a cheap digital thermometer-hygrometer to monitor your kitchen conditions.</div>
+    </div>
+    <div class="storage-box fridge">
+      <h3>❄ Refrigerated Storage (Cohort 2)</h3>
+      <div class="param"><span class="pk">Temperature</span><span class="pv">4°C ± 1°C</span></div>
+      <div class="param"><span class="pk">Humidity (RH)</span><span class="pv">85% ± 5%</span></div>
+      <div class="param"><span class="pk">Simulates</span><span class="pv">Cold chain logistics / domestic refrigerator</span></div>
+      <div class="param"><span class="pk">Container</span><span class="pv">Open-air glass tray (no lid) in fridge</span></div>
+      <div class="param"><span class="pk">Purpose</span><span class="pv">Tests coating under chilling stress. Banana & pepper will experience chilling injury — tests protection.</span></div>
+      <div class="warning" style="margin-top:12px;">⚠ Banana at 4°C will experience chilling injury (peel blackening) which is a separate physiological stress — note this in observations.</div>
+    </div>
+  </div>
+  <div class="cite-block" style="margin-top:12px;"><a href="https://postharvest.ucdavis.edu/produce-facts-sheets/squash-soft-rind" target="_blank">UC Davis – Squash storage parameters</a> · <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5903658/" target="_blank">PMC5903658 – Accuracy of visual evaluations in storage experiments</a></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+  SECTION 5 – SPECIMEN COUNT
+════════════════════════════════════════════════ -->
+<section id="counts">
+  <div class="section-label">Section 05</div>
+  <h2>Specimen Count & Structure</h2>
+  <p style="margin-bottom:20px; font-size:14px; color:var(--text-mid);">Minimum <strong>N = 10 per treatment group per storage condition</strong> (scaled down from lab N=30 for kitchen feasibility). This gives statistically meaningful trends while remaining manageable.</p>
+
+  <div class="count-grid">
+    <div class="count-card">
+      <div class="count-num">240</div>
+      <div class="count-label">Total Specimens</div>
+      <div class="count-breakdown">4 fruits × 3 groups × 2 conditions × 10 each</div>
+    </div>
+    <div class="count-card">
+      <div class="count-num">60</div>
+      <div class="count-label">Per Fruit</div>
+      <div class="count-breakdown">3 groups × 2 conditions × 10 each</div>
+    </div>
+    <div class="count-card">
+      <div class="count-num">10</div>
+      <div class="count-label">Per Cell</div>
+      <div class="count-breakdown">e.g. "Strawberry · Group C · Ambient" = 10 pieces</div>
+    </div>
+    <div class="count-card">
+      <div class="count-num">20</div>
+      <div class="count-label">Per Group per Fruit</div>
+      <div class="count-breakdown">10 ambient + 10 refrigerated</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:20px;">
+    <h4>Quick Breakdown by Fruit</h4>
+    <table class="group-table" style="margin-top:12px;">
+      <thead>
+        <tr>
+          <th style="background:var(--green-deep); color:white;">Fruit</th>
+          <th class="th-neg">Group A (Neg)</th>
+          <th class="th-pos">Group B (Pos)</th>
+          <th class="th-mvp">Group C (MVP)</th>
+          <th style="background:var(--green-deep); color:white;">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>🍓 Strawberry</td>
+          <td>10 amb + 10 fridge</td>
+          <td>10 amb + 10 fridge</td>
+          <td>10 amb + 10 fridge</td>
+          <td><strong>60</strong></td>
+        </tr>
+        <tr>
+          <td>🍌 Banana</td>
+          <td>10 amb + 10 fridge</td>
+          <td>10 amb + 10 fridge</td>
+          <td>10 amb + 10 fridge</td>
+          <td><strong>60</strong></td>
+        </tr>
+        <tr>
+          <td>🍅 Cherry Tomato</td>
+          <td>10 amb + 10 fridge</td>
+          <td>10 amb + 10 fridge</td>
+          <td>10 amb + 10 fridge</td>
+          <td><strong>60</strong></td>
+        </tr>
+        <tr>
+          <td>🫑 Bell Pepper</td>
+          <td>10 amb + 10 fridge</td>
+          <td>10 amb + 10 fridge</td>
+          <td>10 amb + 10 fridge</td>
+          <td><strong>60</strong></td>
+        </tr>
+        <tr>
+          <td><strong>TOTAL</strong></td>
+          <td><strong>80</strong></td>
+          <td><strong>80</strong></td>
+          <td><strong>80</strong></td>
+          <td><strong>240</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+  SECTION 6 – EXPERIMENT TREE
+════════════════════════════════════════════════ -->
+<section id="tree">
+  <div class="section-label">Section 06</div>
+  <h2>Experiment Tree — Visual Overview</h2>
+  <p style="margin-bottom:20px; font-size:14px; color:var(--text-mid);">This tree shows the full structure. Every node represents a group of 10 specimens to be tracked.</p>
+
+  <div class="tree-wrap">
+    <div class="tree-root">
+      <div class="tree-node-top">🧪 PhytoNexa Kitchen MVP (240 specimens total)</div>
+      <div class="tree-connector"></div>
+      <div style="display:flex; gap:60px; align-items:flex-start;">
+
+        <!-- AMBIENT BRANCH -->
+        <div class="tree-branch">
+          <div class="tree-branch-label lbl-ambient">🌡 Ambient · 22°C · 65% RH</div>
+          <div class="tree-connector"></div>
+          <div class="group-row">
+            <div class="group-col gc-neg">
+              <div class="gc-label gcl-neg">Group A</div>
+              <div class="fruit-mini">
+                <div><span class="fn">🍓 Strawberry</span> <span class="fc">n=10</span></div>
+                <div><span class="fn">🍌 Banana</span> <span class="fc">n=10</span></div>
+                <div><span class="fn">🍅 Cherry Tom.</span> <span class="fc">n=10</span></div>
+                <div><span class="fn">🫑 Bell Pepper</span> <span class="fc">n=10</span></div>
+              </div>
+            </div>
+            <div class="group-col gc-pos">
+              <div class="gc-label gcl-pos">Group B</div>
+              <div class="fruit-mini">
+                <div><span class="fn">🍓 Strawberry</span> <span class="fc">n=10</span></div>
+                <div><span class="fn">🍌 Banana</span> <span class="fc">n=10</span></div>
+                <div><span class="fn">🍅 Cherry Tom.</span> <span class="fc">n=10</span></div>
+                <div><span class="fn">🫑 Bell Pepper</span> <span class="fc">n=10</span></div>
+              </div>
+            </div>
+            <div class="group-col gc-mvp">
+              <div class="gc-label gcl-mvp">Group C</div>
+              <div class="fruit-mini">
+                <div><span class="fn">🍓 Strawberry</span> <span class="fc">n=10</span></div>
+                <div><span class="fn">🍌 Banana</span> <span class="fc">n=10</span></div>
+                <div><span class="fn">🍅 Cherry Tom.</span> <span class="fc">n=10</span></div>
+                <div><span class="fn">🫑 Bell Pepper</span> <span class="fc">n=10</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FRIDGE BRANCH -->
+        <div class="tree-branch">
+          <div class="tree-branch-label lbl-fridge">❄ Refrigerated · 4°C · 85% RH</div>
+          <div class="tree-connector"></div>
+          <div class="group-row">
+            <div class="group-col gc-neg">
+              <div class="gc-label gcl-neg">Group A</div>
+              <div class="fruit-mini">
+                <div><span class="fn">🍓 Strawberry</span> <span class="fc">n=10</span></div>
+                <div><span class="fn">🍌 Banana</span> <span class="fc">n=10</span></div>
+                <div><span class="fn">🍅 Cherry Tom.</span> <span class="fc">n=10</span></div>
+                <div><span class="fn">🫑 Bell Pepper</span> <span class="fc">n=10</span></div>
+              </div>
+            </div>
+            <div class="group-col gc-pos">
+              <div class="gc-label gcl-pos">Group B</div>
+              <div class="fruit-mini">
+                <div><span class="fn">🍓 Strawberry</span> <span class="fc">n=10</span></div>
+                <div><span class="fn">🍌 Banana</span> <span class="fc">n=10</span></div>
+                <div><span class="fn">🍅 Cherry Tom.</span> <span class="fc">n=10</span></div>
+                <div><span class="fn">🫑 Bell Pepper</span> <span class="fc">n=10</span></div>
+              </div>
+            </div>
+            <div class="group-col gc-mvp">
+              <div class="gc-label gcl-mvp">Group C</div>
+              <div class="fruit-mini">
+                <div><span class="fn">🍓 Strawberry</span> <span class="fc">n=10</span></div>
+                <div><span class="fn">🍌 Banana</span> <span class="fc">n=10</span></div>
+                <div><span class="fn">🍅 Cherry Tom.</span> <span class="fc">n=10</span></div>
+                <div><span class="fn">🫑 Bell Pepper</span> <span class="fc">n=10</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+  SECTION 7 – TIMELINE
+════════════════════════════════════════════════ -->
+<section id="timeline">
+  <div class="section-label">Section 07</div>
+  <h2>Assessment Timeline — When to Check Each Fruit</h2>
+  <p style="margin-bottom:20px; font-size:14px; color:var(--text-mid);">Strawberry is assessed <strong>daily</strong> due to extreme perishability. All others every <strong>3 days</strong>. Ambient storage ends earlier than refrigerated. <span style="color:var(--neg); font-weight:700;">Red days</span> = assessment day.</p>
+
+  <table class="timeline-table">
+    <thead>
+      <tr>
+        <th>Fruit</th>
+        <th>Storage</th>
+        <th>Experiment End Day</th>
+        <th>Assessment Days</th>
+        <th>What to Assess</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- STRAWBERRY -->
+      <tr>
+        <td rowspan="2">🍓 <strong>Strawberry</strong></td>
+        <td>🌡 Ambient</td>
+        <td><strong>Day 7</strong></td>
+        <td>
+          <span class="day-pill urgent">D0</span>
+          <span class="day-pill urgent">D1</span>
+          <span class="day-pill urgent">D2</span>
+          <span class="day-pill urgent">D3</span>
+          <span class="day-pill urgent">D4</span>
+          <span class="day-pill urgent">D5</span>
+          <span class="day-pill urgent">D6</span>
+          <span class="day-pill urgent">D7</span>
+        </td>
+        <td>Weight, Firmness, Visual score, Fungal presence</td>
+      </tr>
+      <tr>
+        <td>❄ Fridge</td>
+        <td><strong>Day 7–10</strong></td>
+        <td>
+          <span class="day-pill urgent">D0</span>
+          <span class="day-pill urgent">D1</span>
+          <span class="day-pill urgent">D2</span>
+          <span class="day-pill urgent">D3</span>
+          <span class="day-pill urgent">D4</span>
+          <span class="day-pill urgent">D5</span>
+          <span class="day-pill urgent">D6</span>
+          <span class="day-pill urgent">D7</span>
+        </td>
+        <td>Weight, Firmness, Visual score, Fungal presence</td>
+      </tr>
+      <!-- BANANA -->
+      <tr>
+        <td rowspan="2">🍌 <strong>Banana</strong></td>
+        <td>🌡 Ambient</td>
+        <td><strong>Day 12</strong></td>
+        <td>
+          <span class="day-pill">D0</span><span class="day-pill">D3</span><span class="day-pill">D6</span><span class="day-pill">D9</span><span class="day-pill">D12</span>
+        </td>
+        <td>Weight, Peel colour stage (1–7 USDA), Firmness, Visual score</td>
+      </tr>
+      <tr>
+        <td>❄ Fridge</td>
+        <td><strong>Day 15</strong></td>
+        <td>
+          <span class="day-pill">D0</span><span class="day-pill">D3</span><span class="day-pill">D6</span><span class="day-pill">D9</span><span class="day-pill">D12</span><span class="day-pill">D15</span>
+        </td>
+        <td>Weight, Peel colour stage, Firmness, Chilling injury notes</td>
+      </tr>
+      <!-- CHERRY TOMATO -->
+      <tr>
+        <td rowspan="2">🍅 <strong>Cherry Tomato</strong></td>
+        <td>🌡 Ambient</td>
+        <td><strong>Day 15</strong></td>
+        <td>
+          <span class="day-pill">D0</span><span class="day-pill">D3</span><span class="day-pill">D6</span><span class="day-pill">D9</span><span class="day-pill">D12</span><span class="day-pill">D15</span>
+        </td>
+        <td>Weight, Colour stage (USDA 1–6), Firmness, Visual, Fungal</td>
+      </tr>
+      <tr>
+        <td>❄ Fridge</td>
+        <td><strong>Day 21</strong></td>
+        <td>
+          <span class="day-pill">D0</span><span class="day-pill">D3</span><span class="day-pill">D6</span><span class="day-pill">D9</span><span class="day-pill">D12</span><span class="day-pill">D15</span><span class="day-pill">D18</span><span class="day-pill">D21</span>
+        </td>
+        <td>Weight, Colour stage, Firmness, Visual, Fungal</td>
+      </tr>
+      <!-- BELL PEPPER -->
+      <tr>
+        <td rowspan="2">🫑 <strong>Bell Pepper</strong></td>
+        <td>🌡 Ambient</td>
+        <td><strong>Day 15</strong></td>
+        <td>
+          <span class="day-pill">D0</span><span class="day-pill">D3</span><span class="day-pill">D6</span><span class="day-pill">D9</span><span class="day-pill">D12</span><span class="day-pill">D15</span>
+        </td>
+        <td>Weight, Firmness, Visual score, Surface pitting/wrinkle</td>
+      </tr>
+      <tr>
+        <td>❄ Fridge</td>
+        <td><strong>Day 21</strong></td>
+        <td>
+          <span class="day-pill">D0</span><span class="day-pill">D3</span><span class="day-pill">D6</span><span class="day-pill">D9</span><span class="day-pill">D12</span><span class="day-pill">D15</span><span class="day-pill">D18</span><span class="day-pill">D21</span>
+        </td>
+        <td>Weight, Firmness, Visual score, Chilling injury pitting</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="card" style="margin-top:20px; background:var(--green-pale);">
+    <h4>Overall Experiment Duration</h4>
+    <p style="font-size:13px;">Start: Day 0 (coating day) → Finish: <strong>Day 21</strong> (longest running group: cherry tomato & bell pepper, refrigerated). Commit 3 weeks from coating day. Strawberry finishes in Week 1.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+  SECTION 8 – ASSESSMENT METHODS
+════════════════════════════════════════════════ -->
+<section id="methods">
+  <div class="section-label">Section 08</div>
+  <h2>Assessment Methods (Non-Destructive First)</h2>
+  <p style="margin-bottom:8px; font-size:14px; color:var(--text-mid);">Priority order: always do non-destructive (ND) methods first on every specimen, every assessment day. Destructive (D) methods only as last resort.</p>
+
+  <!-- METHOD 1: WEIGHT -->
+  <div class="method-card">
+    <div class="method-header">
+      <div class="method-icon">⚖️</div>
+      <div>
+        <div class="method-title">1. Fresh Weight Loss % (Transpiration)</div>
+        <div class="method-type mt-nd">● Non-Destructive · Do First</div>
+      </div>
+    </div>
+    <ul class="method-steps">
+      <li>Use a digital scale precise to <strong>0.01 g</strong>. Weigh every specimen individually.</li>
+      <li>Record weight as Wₜ (weight at day t).</li>
+      <li>Calculate: <strong>WL(%) = ((W₀ − Wₜ) / W₀) × 100</strong></li>
+      <li>W₀ = initial weight recorded on Day 0 (right after curing).</li>
+      <li>Plot on line graph over time. Coated specimens should show a shallower slope.</li>
+    </ul>
+    <div class="formula-box">WL(%) = ( W₀ − Wₜ ) ÷ W₀ × 100</div>
+    <div class="cite-block" style="margin-top:8px;"><a href="https://journals.flvc.org/fshs/article/download/86230/83146/0" target="_blank">Florida Online Journals – Relationship between Weight Loss and Visual Quality of Fruits and Vegetables</a></div>
+  </div>
+
+  <!-- METHOD 2: VISUAL -->
+  <div class="method-card">
+    <div class="method-header">
+      <div class="method-icon">👁️</div>
+      <div>
+        <div class="method-title">2. Visual Decay Score (Senescence)</div>
+        <div class="method-type mt-nd">● Non-Destructive · Do Second</div>
+      </div>
+    </div>
+    <ul class="method-steps">
+      <li>Score each specimen on the <strong>1–5 scale</strong> (see Phase 2 guide for full scoring rubric with fruit-specific cues).</li>
+      <li>Always assess under the <strong>same artificial light</strong> (e.g., same lamp, same spot) to avoid daylight variation affecting colour perception.</li>
+      <li>Record score for each specimen individually, then calculate the group median and mode.</li>
+    </ul>
+    <div class="cite-block"><a href="https://journals.flvc.org/fshs/article/download/86230/83146/0" target="_blank">Florida Online Journals – Weight Loss and Visual Quality</a> · <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5903658/" target="_blank">PMC5903658 – Accuracy of visual evaluations of decay</a></div>
+  </div>
+
+  <!-- METHOD 3: COLOUR -->
+  <div class="method-card">
+    <div class="method-header">
+      <div class="method-icon">🎨</div>
+      <div>
+        <div class="method-title">3. Colour Evolution / Ripening Stage (Respiration Proxy)</div>
+        <div class="method-type mt-nd">● Non-Destructive · Do Third (Climacteric Fruits Only)</div>
+      </div>
+    </div>
+    <ul class="method-steps">
+      <li><strong>Cherry Tomato:</strong> Use the USDA 1–6 colour scale: 1=Green, 2=Breakers, 3=Turning, 4=Pink, 5=Light Red, 6=Red. Record the stage for each tomato.</li>
+      <li><strong>Banana:</strong> Use the 1–7 Banana Ripeness Colour Index: 1=Full green → 7=Yellow with brown patches. A well-known visual reference.</li>
+      <li>If Group C tomatoes take 14 days to reach "Red" while Group A takes 7 days → respiration control is confirmed.</li>
+      <li>Take photos under consistent lighting on every assessment day.</li>
+    </ul>
+    <div class="cite-block"><a href="https://www.researchgate.net/figure/Ripening-indexes-values-for-tomato-fruits-harvested-at-different-color-stages-Balcarce_tbl1_250045788" target="_blank">ResearchGate – Ripening indexes for tomato colour stages</a> · <a href="https://journals.ashs.org/downloadpdf/view/journals/hortsci/27/9/article-p1016.pdf" target="_blank">ASHS – Chitosan coating extend storage life of tomatoes</a></div>
+  </div>
+
+  <!-- METHOD 4: FUNGAL -->
+  <div class="method-card">
+    <div class="method-header">
+      <div class="method-icon">🦠</div>
+      <div>
+        <div class="method-title">4. Fungal Decay Incidence (Binary 0/1)</div>
+        <div class="method-type mt-nd">● Non-Destructive · Visual Observation · Do Fourth</div>
+      </div>
+    </div>
+    <ul class="method-steps">
+      <li>Inspect each specimen carefully. Record <strong>0 = no fungal growth visible</strong>, <strong>1 = any fungal growth visible</strong>.</li>
+      <li><strong>Strawberry:</strong> Look for grey-white fuzzy coating → <em>Botrytis cinerea</em> (Grey Mould)</li>
+      <li><strong>Cherry Tomato:</strong> Look for blue-green powdery spots → <em>Penicillium expansum</em></li>
+      <li><strong>Banana:</strong> Look for black sunken lesions → <em>Colletotrichum musae</em> (Anthracnose)</li>
+      <li><strong>Bell Pepper:</strong> Look for grey-white fuzz or soft watery patches → <em>Botrytis cinerea</em> or <em>Alternaria alternata</em></li>
+      <li>Calculate: Decay Incidence (%) = (number of specimens with score 1 ÷ total specimens in group) × 100</li>
+    </ul>
+    <div class="cite-block"><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12785490/" target="_blank">PMC12785490 – Active Edible Coatings to Mitigate Postharvest Diseases</a> · <a href="https://postharvest.ucdavis.edu/produce-facts-sheets/strawberry" target="_blank">UC Davis – Strawberry postharvest facts</a></div>
+  </div>
+
+  <!-- METHOD 5: FIRMNESS -->
+  <div class="method-card">
+    <div class="method-header">
+      <div class="method-icon">💪</div>
+      <div>
+        <div class="method-title">5. Firmness (Tactile + Equipment)</div>
+        <div class="method-type mt-nd">● Non-Destructive (with device) · Do Fifth</div>
+      </div>
+    </div>
+    <ul class="method-steps">
+      <li><strong>If you have a fruit firmness tester (penetrometer / durometer):</strong> Press the probe (8 mm tip) gently onto a flat surface area of the fruit. Record the force reading in kg or N. Take 2 readings per specimen (opposite sides) and average them. Do NOT break the skin.</li>
+      <li><strong>Without equipment:</strong> Use the 1–5 Tactile Firmness Scale (defined in Phase 2 tool). Score by gently pressing with one finger — do not compress more than 2 mm.</li>
+      <li>Record firmness score for each specimen individually.</li>
+      <li>This is non-destructive as long as the skin is not punctured.</li>
+    </ul>
+    <div class="cite-block"><a href="https://www.hin.com.au/networks/profitable-stonefruit-research/stonefruit-orchard-technology/portable-impact-probe-for-rapid-assessments-of-flesh-firmness" target="_blank">HIN – Portable firmness probe for fruit</a> · <a href="https://www.nextgentest.com/plastic-testing-equipment/fruit-firmness-tester/" target="_blank">NextGen – Fruit Firmness Tester guide</a></div>
+  </div>
+
+  <!-- METHOD 6: DESTRUCTIVE (LAST RESORT) -->
+  <div class="method-card" style="border-color:var(--neg);">
+    <div class="method-header">
+      <div class="method-icon" style="background:var(--red-pale);">🔪</div>
+      <div>
+        <div class="method-title">6. Destructive Penetrometry (Last Resort Only)</div>
+        <div class="method-type mt-d">● Destructive · Only if no firmness equipment available · Do LAST</div>
+      </div>
+    </div>
+    <ul class="method-steps">
+      <li>Only used if no firmness tester is available AND tactile scale alone is insufficient.</li>
+      <li>Use a rigid cylindrical probe (8 mm diameter tip). Place on fruit surface. Add calibrated weights (e.g., water in a cup on top) until skin yields.</li>
+      <li>Record the mass at yield. This specimen can no longer be used for subsequent assessments.</li>
+      <li><strong>Strategy:</strong> Reserve 1–2 specimens per group solely for this test on the final assessment day.</li>
+    </ul>
+    <div class="warning">⚠ Each specimen used for destructive testing is removed from the longitudinal tracking. Plan specimen numbers accordingly.</div>
+    <div class="cite-block"><a href="https://www.agro-technology.co.uk/blog/2024/how-to-use-a-penetrometer-to-measure-fruit-firmness/" target="_blank">AGROSTA – How to use a penetrometer to measure fruit firmness</a></div>
+  </div>
+
+</section>
+
+<!-- ═══════════════════════════════════════════════
+  SECTION 9 – ASSESSMENT ORDER
+════════════════════════════════════════════════ -->
+<section id="order">
+  <div class="section-label">Section 09</div>
+  <h2>Assessment Order (Per Specimen, Every Assessment Day)</h2>
+  <p style="margin-bottom:16px; font-size:14px; color:var(--text-mid);">Follow this sequence for every fruit on every assessment day. Non-destructive methods always come first.</p>
+
+  <div class="order-row">
+    <div class="order-step priority-nd">① Weigh<br><small>⚖️ 0.01g scale</small></div>
+    <div class="order-arrow">→</div>
+    <div class="order-step priority-nd">② Visual Score<br><small>👁 1–5 scale</small></div>
+    <div class="order-arrow">→</div>
+    <div class="order-step priority-nd">③ Colour Stage<br><small>🎨 USDA / Banana index</small></div>
+    <div class="order-arrow">→</div>
+    <div class="order-step priority-nd">④ Fungal Check<br><small>🦠 0 or 1</small></div>
+    <div class="order-arrow">→</div>
+    <div class="order-step priority-nd">⑤ Firmness<br><small>💪 Device or 1–5</small></div>
+    <div class="order-arrow">→</div>
+    <div class="order-step priority-d">⑥ Destructive<br><small>🔪 LAST RESORT only</small></div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <h4>⏱ Time Per Assessment Session (estimate)</h4>
+    <p style="font-size:13px;">Allow <strong>2–3 hours per assessment day</strong> for all 240 specimens. Work systematically: complete all measurements for one storage condition and one fruit type before moving to the next. Take photos of each specimen before any handling.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+  SECTION 10 – PRE-EXPERIMENT CHECKLIST
+════════════════════════════════════════════════ -->
+<section id="checklist">
+  <div class="section-label">Section 10</div>
+  <h2>Pre-Experiment Checklist</h2>
+  <p style="margin-bottom:20px; font-size:14px; color:var(--text-mid);">Before you start on Day 0, confirm everything below is ready.</p>
+
+  <div class="card-grid card-grid-2">
+    <div class="card">
+      <h4>🧪 Materials & Chemicals</h4>
+      <ul class="checklist">
+        <li>Chitosan powder (food-grade)</li>
+        <li>White culinary vinegar (standard 5% acetic acid)</li>
+        <li>Distilled water (several litres)</li>
+        <li>Food-grade glycerol</li>
+        <li>OMW polyphenol concentrate (hydroxytyrosol/tyrosol)</li>
+        <li>Household bleach (for 50 ppm sanitization solution)</li>
+        <li>High-speed blender (Vitamix or equivalent)</li>
+        <li>Double-boiler setup (bowl + pot)</li>
+        <li>Stainless-steel tongs (sterilized)</li>
+        <li>Wire cooling racks (sterilized)</li>
+        <li>Small electric fan</li>
+        <li>Digital scale (0.01 g precision)</li>
+        <li>Digital thermometer-hygrometer</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>🍓 Produce & Setup</h4>
+      <ul class="checklist">
+        <li>60 strawberries (commercially ripe, ≥75% red, calyx intact)</li>
+        <li>60 bananas (Stage 2–3, green with yellow tips)</li>
+        <li>60 cherry tomatoes (Breaker–Turning, 10–30% colour change)</li>
+        <li>60 bell peppers (firm, fully coloured, no blemishes)</li>
+        <li>Sticky labels or masking tape + marker for tagging</li>
+        <li>Open-air plastic trays × 6 (3 groups × 2 conditions)</li>
+        <li>Open-air glass trays for fridge (3 groups)</li>
+        <li>Fruit firmness tester (if purchased)</li>
+        <li>Consistent artificial light source for visual scoring</li>
+        <li>Camera or phone for daily photos</li>
+        <li>Data recording sheet (see Phase 2 Excel tool)</li>
+        <li>Fridge with space for 3 open trays</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <strong>PhytoNexa Kitchen MVP — Phase 1 Experiment Briefing Guide</strong><br>
+  Based on methodology from the Kitchen MVP Edible Coating Experiment document.<br>
+  Key references: <a href="https://journals.flvc.org/fshs/article/download/86230/83146/0" style="color:var(--green-light);">Florida Journals – Weight Loss & Visual Quality</a> · 
+  <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12030211/" style="color:var(--green-light);">PMC12030211 – Chitosan Coating</a> · 
+  <a href="https://www.maxapress.com/article/id/66b2d6b1fa6c581f17c3ae4b" style="color:var(--green-light);">Maxapress – Edible Coatings Protocol</a>
+</footer>
+
+</body>
+</html>
